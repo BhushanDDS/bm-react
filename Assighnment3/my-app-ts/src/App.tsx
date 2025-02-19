@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import './index.css'
 import axios from 'axios'
-import Posts from './component/Posts';
 import SubmitPost from './component/SubmitPost';
 import TopPost from './component/TopPosts';
 
@@ -57,11 +57,17 @@ const postHandler= async ()=>{
 }
 return (
   <>
-    <h3 className="text-xl font-semibold mb-4">Top 5 Posts</h3>
+
+  <div className='flex flex-col items-center justify-center text-center'>
+
+
+    <h3 className="text-xl font-semibold mb-4 text-center bg-pink-400">Top 5 Posts</h3>
     {Array.isArray(topposts) &&
       topposts.map((val) => (
         <TopPost key={val.id} title={val.title} body={val.body} id={val.id} />
       ))}
+
+  </div>
 
     <div className="mt-6 p-4 bg-gray-100 rounded-lg shadow-md">
       <h3 className="text-lg font-semibold mb-2">Get By Id</h3>
