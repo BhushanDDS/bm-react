@@ -1,41 +1,84 @@
-import React,{ useState } from 'react'
+import React,{ useState,useReducer } from 'react'
 import './App.css'
-import {TaskContextProvider , useTaskContext} from './contexts/TaskContext.jsx'
+import {TaskContextProvider } from './contexts/TaskContext.jsx'
 
 import nextId from "react-id-generator";
 import ItemList from './components/ItemList.jsx';
 
 
+const reducer =(state,action)=>{
+  switch(action.type){
+    case "add-task":
+      return [{ id: nextId(), task: action.payload, isComplete: false }, ...state];
+
+    case "update-task":
+    return state.map((task) =>
+      task.id === action.payload.id ? { ...task, ...action.payload.newTask } : task
+    );
+
+    case "handle-toggle":
+      return state.map((task) =>
+        task.id === action.payload ? { ...task, isComplete: !task.isComplete } : task
+      );
+    case "remove-task":
+      return state.filter((task) => task.id !== action.payload);
+    
+    default:
+      return state
+
+  }
+}
+
 function App() {
+
 
 
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState("");
+  const [state, dispatch] = useReducer(reducer, [])
 
   const addTask=()=>{
-
     if(!task) return;
-
-    const id1 = nextId();
-    setTasks((prev) => [{id: id1, task:task ,isComplete :false}, ...prev] )
+    dispatch({type:"add-task",payload:task})
     setTask("")
   }
-
   const updateTask=(id,newTask)=>{
-    setTasks((prev) => prev.map((prevTodo) => (prevTodo.id === id ? { ...prevTodo, ...newTask } : prevTodo)));
-
+    dispatch({type:"update-task",payload:{id,newTask}})
   }
-
   const toggleComplete=(id)=>{
-    setTasks((prev) => 
-      prev.map((prevTodo) => 
-        prevTodo.id === id ? { ...prevTodo, 
-          isComplete: !prevTodo.isComplete } : prevTodo))
+    dispatch({type:"handle-toggle",payload:id})
+  }
+  const removeTask=(id)=>{
+    dispatch({type:"remove-task",payload:id})
   }
 
-  const removeTask=(id)=>{
-    setTasks((prev) => prev.filter((task) => task.id !== id))
-  }
+
+
+  
+  // const addTask=()=>{
+
+  //   if(!task) return;
+
+  //   const id1 = nextId();
+  //   setTasks((prev) => [{id: id1, task:task ,isComplete :false}, ...prev] )
+  //   setTask("")
+  // }
+
+  // const updateTask=(id,newTask)=>{
+  //   setTasks((prev) => prev.map((prevTodo) => (prevTodo.id === id ? { ...prevTodo, ...newTask } : prevTodo)));
+
+  // }
+
+  // const toggleComplete=(id)=>{
+  //   setTasks((prev) => 
+  //     prev.map((prevTodo) => 
+  //       prevTodo.id === id ? { ...prevTodo, 
+  //         isComplete: !prevTodo.isComplete } : prevTodo))
+  // }
+
+  // const removeTask=(id)=>{
+  //   setTasks((prev) => prev.filter((task) => task.id !== id))
+  // }
 
 
 
@@ -61,7 +104,7 @@ return (
       </div>
 
       <div className="space-y-4">
-        {tasks.map((task) => (
+        {state.map((task) => (
           <div key={task.id} className="p-4 bg-white shadow-md rounded-lg border border-gray-200">
             <ItemList task={task} />
           </div>
