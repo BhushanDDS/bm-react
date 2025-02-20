@@ -1,4 +1,4 @@
-import React,{ useState,useReducer } from 'react'
+import React,{ useState,useReducer,useCallback,useMemo } from 'react'
 import './App.css'
 import {TaskContextProvider } from './contexts/TaskContext.jsx'
 
@@ -37,51 +37,27 @@ function App() {
   const [task, setTask] = useState("");
   const [state, dispatch] = useReducer(reducer, [])
 
-  const addTask=()=>{
-    if(!task) return;
-    dispatch({type:"add-task",payload:task})
-    setTask("")
-  }
-  const updateTask=(id,newTask)=>{
-    dispatch({type:"update-task",payload:{id,newTask}})
-  }
-  const toggleComplete=(id)=>{
-    dispatch({type:"handle-toggle",payload:id})
-  }
-  const removeTask=(id)=>{
-    dispatch({type:"remove-task",payload:id})
-  }
+  const addTask = useCallback(() => {
+    if (!task) return;
+    dispatch({ type: "add-task", payload: task });
+    setTask("");
+  }, [task]);
 
+  const updateTask = useCallback((id, newTask) => {
+    dispatch({ type: "update-task", payload: { id, newTask } });
+  }, []);
 
+  const toggleComplete = useCallback((id) => {
+    dispatch({ type: "handle-toggle", payload: id });
+  }, []);
 
-  
-  // const addTask=()=>{
+  const removeTask = useCallback((id) => {
+    dispatch({ type: "remove-task", payload: id });
+  }, []);
 
-  //   if(!task) return;
+  const tasksmemo = useMemo(() => state, [state]);
 
-  //   const id1 = nextId();
-  //   setTasks((prev) => [{id: id1, task:task ,isComplete :false}, ...prev] )
-  //   setTask("")
-  // }
-
-  // const updateTask=(id,newTask)=>{
-  //   setTasks((prev) => prev.map((prevTodo) => (prevTodo.id === id ? { ...prevTodo, ...newTask } : prevTodo)));
-
-  // }
-
-  // const toggleComplete=(id)=>{
-  //   setTasks((prev) => 
-  //     prev.map((prevTodo) => 
-  //       prevTodo.id === id ? { ...prevTodo, 
-  //         isComplete: !prevTodo.isComplete } : prevTodo))
-  // }
-
-  // const removeTask=(id)=>{
-  //   setTasks((prev) => prev.filter((task) => task.id !== id))
-  // }
-
-
-
+console.log(tasksmemo);
 
 return (
   <TaskContextProvider value={{ addTask, removeTask, tasks, toggleComplete, updateTask }}>
