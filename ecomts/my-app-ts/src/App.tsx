@@ -62,35 +62,42 @@ const getAllProducts =async()=>{
 
 
 
-  return (
-    < >
-
-    <nav>
-      <Header/>
+return (
+  <>
+    {/* Navbar */}
+    <nav className="bg-blue-600 p-4 text-white shadow-md">
+      <Header />
     </nav>
 
-      <div>
-       
-       <button onClick={getAllProducts}>Get All Products</button>
+    {/* Category & Fetch Buttons */}
+    <div className="flex flex-wrap justify-center gap-3 my-6">
+      <button 
+        onClick={getAllProducts} 
+        className="px-5 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition-all"
+      >
+        Get All Products
+      </button>
+
       {categories?.map((val) => (
-  <button key={val} onClick={() => handleCategoryClick(val)}>{val}</button>
-))}
+        <button 
+          key={val} 
+          onClick={() => handleCategoryClick(val)} 
+          className="px-4 py-2 bg-gray-200 text-gray-800 font-medium rounded-md hover:bg-gray-300 transition-all"
+        >
+          {val}
+        </button>
+      ))}
+    </div>
 
-      </div>
+    {/* Products Grid */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
+      {products?.map((val) => (
+        <AllProducts key={val.id} product={val} />
+      ))}
+    </div>
+  </>
+);
 
-
-
-      <div>
-      {
-       products?.map((val)=>(
-        <AllProducts key={val.id} product={val}  />
-       ))
-      }  
-      </div>
-
-
-    </>
-  )
 }
 
 export default App

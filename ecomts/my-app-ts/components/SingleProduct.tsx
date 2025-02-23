@@ -10,7 +10,7 @@ type Product = {
   category: string;
   description: string;
   image: string;
-
+ 
 };
 function SingleProduct() {
     const navigate = useNavigate();
@@ -34,17 +34,33 @@ function SingleProduct() {
     if (!product) return <p>Loading...</p>;
 
     return (
-        <>
-            <img src={product.image} alt={product.title} />
-            <h2>{product.title}</h2>
-            <p>{product.description}</p>
-            <p>Price: ${product.price}</p>
-            <button onClick={()=>{
-              navigate('/');
-            }}>Go back to Homepage</button>
-
-        </>
-    );
+        <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-6 border border-gray-200">
+          
+          {/* Product Image */}
+          <img 
+            src={product.image} 
+            alt={product.title} 
+            className="w-full h-64 object-contain p-4"
+          />
+      
+          {/* Product Details */}
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-gray-800">{product.title}</h2>
+            <p className="text-gray-600 mt-2">{product.description}</p>
+            <p className="text-lg font-semibold text-blue-600 mt-4">Price: ${product.price}</p>
+      
+            {/* Back Button */}
+            <button 
+              onClick={() => navigate('/')} 
+              className="mt-6 px-6 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition-all"
+            >
+              Go back to Homepage
+            </button>
+          </div>
+          
+        </div>
+      );
+      
 }
 
 export default SingleProduct;
