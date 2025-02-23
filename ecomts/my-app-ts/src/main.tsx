@@ -8,15 +8,19 @@ import SingleProduct from '../components/SingleProduct'
 import ProtectedAdmin from '../components/Admin/ProtectedAdmin.tsx'
 import Dashboard from '../components/Admin/Dashboard.tsx'
 import Cart from '../components/Cart.tsx'
+import {AuthProvider} from '../contexts/AuthContext.tsx'
+import AdminLogin from '../components/Admin/AdminLogin.tsx'
 
 createRoot(document.getElementById('root')!).render(
 
   <BrowserRouter>
-  
+   <AuthProvider>
   <ProductProvider>
       <StrictMode>
+
         <Routes>
-          <Route element={<ProtectedAdmin isAuthenticated={true}/>}>
+        <Route path="/admin-login" element={<AdminLogin />} />
+          <Route element={<ProtectedAdmin />}>
           <Route path='/dashboard' element={<Dashboard/>}/>
 
           </Route>
@@ -31,6 +35,7 @@ createRoot(document.getElementById('root')!).render(
         </Routes>
       </StrictMode>
     </ProductProvider>
+    </AuthProvider>
 
   </BrowserRouter>
 )

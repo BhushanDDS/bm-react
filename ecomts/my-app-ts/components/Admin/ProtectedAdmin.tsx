@@ -1,12 +1,10 @@
-import React from 'react'
 import { Navigate, Outlet } from "react-router-dom";
+import React from "react";
+import { useAuth } from "../../contexts/AuthContext";
 
-type ProtectedRouteProps = {
-  isAuthenticated: boolean;
-};
-
-const ProtectedAdmin = ({ isAuthenticated }: ProtectedRouteProps) => {
-  return <>{isAuthenticated ? <Outlet /> : <Navigate to="/" />}</>;
+const ProtectedAdmin = () => {
+  const { state } = useAuth();
+  return state.isAuthenticated ? <Outlet /> : <Navigate to="/admin-login" />;
 };
 
 export default ProtectedAdmin;

@@ -53,12 +53,20 @@ export default Cart;
 
 import React from 'react';
 import { useProductContext } from '../contexts/ProductContext';
+import Header from './Layouts/Header';
 
 function Cart() {
     const { cart, getCart, removeFromCart, updateCartQuantity } = useProductContext();
 
     return (
-        <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200 mt-6">
+
+<>
+
+
+<Header/>
+
+
+        <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200 mt-6 bg-gray-900">
           
           <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">Shopping Cart</h2>
       
@@ -108,6 +116,7 @@ function Cart() {
             </div>
           )}
         </div>
+</>
       );
 }
 

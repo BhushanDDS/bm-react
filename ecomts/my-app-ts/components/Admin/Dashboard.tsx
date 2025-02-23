@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import PostForm from './PostForm'
 import Admin_Product from './Admin_Product'
 import { useProductContext } from "../../contexts/ProductContext";
+import { useAuth } from '../../contexts/AuthContext';
 type Product = {
   id?: number;
   title: string;
@@ -13,11 +14,18 @@ type Product = {
 };
 
 function Dashboard() {
-const nav= useNavigate();
-const handleLogout=()=>{
-nav('/')
-}
+  const { dispatch } = useAuth();
 
+  const navigate = useNavigate();
+// const handleLogout=()=>{
+// nav('/')
+// }
+
+
+const handleLogout = () => {
+  dispatch({ type: "LOGOUT" }); // Dispatch logout action
+  navigate("/admin-login");
+};
   const { getProducts } = useProductContext();
   const [products, setProducts] = useState<Product[]>([]); 
 
