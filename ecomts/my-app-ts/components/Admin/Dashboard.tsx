@@ -23,7 +23,7 @@ function Dashboard() {
 
 
 const handleLogout = () => {
-  dispatch({ type: "LOGOUT" }); // Dispatch logout action
+  dispatch({ type: "LOGOUT" }); 
   navigate("/admin-login");
 };
   const { getProducts } = useProductContext();
@@ -47,7 +47,6 @@ const handleLogout = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       
-      {/* Navbar */}
       <nav className="bg-white shadow-md flex justify-between items-center px-6 py-4 rounded-lg">
         <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
         <button 
@@ -58,15 +57,12 @@ const handleLogout = () => {
         </button>
       </nav>
   
-      {/* Main Content */}
       <div className="mt-6 max-w-4xl mx-auto">
         
-        {/* Post Form */}
         <div className="mb-6 bg-white shadow-md p-4 rounded-lg">
           <PostForm />
         </div>
   
-        {/* Product List */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {products.map((val) => (
             <Admin_Product key={val.id} product={val} />

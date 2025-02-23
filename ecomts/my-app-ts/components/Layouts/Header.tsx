@@ -5,12 +5,11 @@ function Header() {
     <nav className="bg-blue-600 p-4 shadow-lg">
       <div className="max-w-5xl mx-auto flex items-center justify-between">
         
-        {/* Logo */}
         <Link to="/" className="text-white text-2xl font-bold tracking-wide">
           Home
         </Link>
   
-        {/* Navigation Links */}
+
         <div className="flex space-x-6">
           
           <Link to="/dashboard" className="text-white text-lg font-medium hover:text-gray-200 transition-all">

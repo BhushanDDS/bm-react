@@ -30,7 +30,7 @@ type ProductContextType={
     getCart: () => void;
     addToCart: (productId: number, quantity: number) => void;
     removeFromCart: (productId: number) => void;
-    updateCartQuantity: (id: number, quantity: number) => void; // ✅ New function
+    updateCartQuantity: (id: number, quantity: number) => void; 
 
      
    
@@ -121,40 +121,46 @@ export const ProductProvider : React.FC<{children:ReactNode}> =({
         try {
           const response = await axios.post(
             "https://fakestoreapi.com/products",
-            JSON.stringify(product), // Convert object to JSON string
+            JSON.stringify(product), 
             {
               headers: {
-                "Content-Type": "application/json", // Set JSON format
+                "Content-Type": "application/json",
               },
             }
           );
       
           return response.status;
         } catch (error) {
-          console.error("Error posting product:", error);
           throw new Error("Error in posting product");
         }
       };
 
-
       const addToCart = async (productId: number, quantity: number) => {
         try {
+            // Fetch product details
+            const productResponse = await axios.get(`https://fakestoreapi.com/products/${productId}`);
+            const product = productResponse.data;
+    
+            // Add to cart API call
             const response = await axios.post(`https://fakestoreapi.com/carts`, {
                 userId: 1,
                 date: new Date().toISOString(),
                 products: [{ productId, quantity }],
             });
+    
             if (response.status === 200) {
                 setCart([...cart, {
-                  id: productId, quantity,
-                  image: undefined,
-                  title: undefined
+                    id: productId,
+                    quantity,
+                    image: product.image,  // Include image
+                    title: product.title   // Include title
                 }]);
             }
         } catch (error) {
             console.error('Error adding to cart:', error);
         }
     };
+ 
 
     const removeFromCart = async (productId: number) => {
         try {

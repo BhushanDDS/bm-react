@@ -39,20 +39,17 @@ function Admin_Product({ product }: AdminProductProps) {
   return (
     <div className="max-w-sm mx-auto bg-white shadow-md rounded-lg p-4 border border-gray-200">
       
-      {/* Product Image */}
       <img 
         src={product?.image} 
         alt={product?.title} 
         className="w-32 h-32 object-contain mx-auto"
       />
   
-      {/* Product Details */}
       <div className="text-center mt-3">
         <p className="text-lg font-semibold text-gray-800">{product?.title}</p>
         <p className="text-gray-600 text-md font-medium mt-1">Price: ${product?.price}</p>
       </div>
   
-      {/* Buttons */}
       <div className="flex justify-center gap-4 mt-4">
         <button 
           onClick={() => handleupdate(product?.id)} 

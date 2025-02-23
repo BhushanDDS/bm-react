@@ -46,7 +46,7 @@ function PostForm() {
       
           <form className="space-y-4" onSubmit={subitHandler}>
             
-            {/* Title */}
+            
             <div>
               <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                 Enter Title
@@ -58,7 +58,6 @@ function PostForm() {
               />
             </div>
       
-            {/* Price */}
             <div>
               <label htmlFor="price" className="block text-sm font-medium text-gray-700">
                 Enter Price
@@ -70,7 +69,6 @@ function PostForm() {
               />
             </div>
       
-            {/* Description */}
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                 Enter Description
@@ -82,7 +80,6 @@ function PostForm() {
               />
             </div>
       
-            {/* Image */}
             <div>
               <label htmlFor="image" className="block text-sm font-medium text-gray-700">
                 Enter Image URL
@@ -94,7 +91,6 @@ function PostForm() {
               />
             </div>
       
-            {/* Category */}
             <div>
               <label htmlFor="category" className="block text-sm font-medium text-gray-700">
                 Enter Category
@@ -106,7 +102,6 @@ function PostForm() {
               />
             </div>
       
-            {/* Submit Button */}
             <button 
               type="submit"
               className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-all"
