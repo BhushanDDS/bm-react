@@ -17,17 +17,14 @@ function Dashboard() {
   const { dispatch } = useAuth();
 
   const navigate = useNavigate();
-// const handleLogout=()=>{
-// nav('/')
-// }
+
 
 
 const handleLogout = () => {
   dispatch({ type: "LOGOUT" }); 
   navigate("/admin-login");
 };
-  const { getProducts } = useProductContext();
-  const [products, setProducts] = useState<Product[]>([]); 
+  const {products, getProducts } = useProductContext();
 
 
  useEffect(() => {
@@ -35,7 +32,6 @@ const handleLogout = () => {
     const fetchProducts = async () => {
       try {
         const response: Product[]|any = await getProducts();
-        setProducts(response);
       } catch (error) {
         console.error("Error fetching products in Admin_Product:", error);
       }
