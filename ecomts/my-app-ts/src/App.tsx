@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import './App.css';
 import { useProductContext } from '../contexts/ProductContext';
 import AllProducts from '../components/AllProducts';
-import Footer from '../components/Layouts/Footer';
 import Header from '../components/Layouts/Header';
 
 function App() {
   const {categories, products, getProducts, getCategories, getProductByCategory } = useProductContext();
+
 
   useEffect(() => {
     getProducts?.();
@@ -15,12 +15,10 @@ function App() {
 
   return (
     <>
-      {/* Navbar */}
       <nav className="bg-blue-600 p-4 text-white shadow-md">
         <Header />
       </nav>
 
-      {/* Category & Fetch Buttons */}
       <div className="flex flex-wrap justify-center gap-3 my-6">
         <button
           onClick={() => getProducts?.()}
@@ -29,7 +27,6 @@ function App() {
           Get All Products
         </button>
 
-        {/* Fetch categories from context */}
         {categories.map((category, index) => (
   <button
     key={`${category}-${index}`}
@@ -41,12 +38,10 @@ function App() {
 ))}
       </div>
 
-      {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6">
       {products?.map((product) => (
   product?.id && <AllProducts key={product.id} product={product} />
 ))}
-
       </div>
     </>
   );

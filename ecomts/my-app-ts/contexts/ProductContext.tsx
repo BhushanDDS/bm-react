@@ -21,14 +21,15 @@ type Product = {
     products: Product[];
     categories: string[];
     cart: CartItem[];
+    status:number;
   };
   
-
 type Action =
 | { type: 'SET_PRODUCTS'; payload: Product[] }
+| { type: 'POST_PRODUCTS'; payload: number }
 | { type: 'SET_CATEGORIES'; payload: string[] }
 | { type: 'ADD_TO_CART'; payload: CartItem }
-| { type: 'REMOVE_FROM_CART'; payload: number } // payload is product id
+| { type: 'REMOVE_FROM_CART'; payload: number } 
 | { type: 'SET_CART'; payload: CartItem[] }
 | { type: 'UPDATE_CART_QUANTITY'; payload: { id: number; quantity: number } };
 
@@ -36,14 +37,17 @@ type Action =
 const initialState: State = {
   products: [],
   categories: [],
-
   cart: [],
+  status:0
 };
+
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'SET_PRODUCTS':
       return { ...state, products: action.payload };
+      case 'POST_PRODUCTS':
+        return { ...state, status: action.payload };
     case 'SET_CATEGORIES':
       return { ...state, categories: action.payload };
     case 'ADD_TO_CART':
@@ -73,9 +77,12 @@ type ProductContextType={
      getProducts: () => Promise<void>;
      getCategories: () => Promise<void>;
      getProductByCategory: (category: string) => Promise<void>;
-     updateProduct?:(id:any)=>void;
-     deleteProduct?:(id:any)=>void;
-     postProductt?:(data:Product)=>void;
+     updateProduct:(id:any)=>void;
+     deleteProduct:(id:any)=>void;
+
+     postProductt:(data:Product)=>void;
+     status:number;
+     
     cart: CartItem[];
     getCart: () => void;
     addToCart: (productId: number, quantity: number) => void;
@@ -88,8 +95,8 @@ const ProductContext= createContext<ProductContextType |undefined>(undefined);
 export const ProductProvider : React.FC<{children:ReactNode}> =({
     children,
 }) =>{
-  const [state, dispatch] = useReducer(reducer, initialState);
 
+    const [state, dispatch] = useReducer(reducer, initialState);
 
     const getProducts = async () => {
       const response = await axios.get(`https://fakestoreapi.com/products`);
@@ -131,13 +138,12 @@ export const ProductProvider : React.FC<{children:ReactNode}> =({
     const deleteProduct=async(id: any)=>{
       const response= await axios.delete(`https://fakestoreapi.com/products/${id}`);
       if(!response){
-        throw new Error("in delete ");
-        
+        throw new Error("in delete ");  
       }
       return response.status
     };
-    // ✅ Fetch Categories
-  const getCategories = async () => {
+
+    const getCategories = async () => {
     try {
       const response = await axios.get('https://fakestoreapi.com/products/categories');
       dispatch({ type: 'SET_CATEGORIES', payload: response.data });
@@ -155,7 +161,7 @@ export const ProductProvider : React.FC<{children:ReactNode}> =({
     }
   };
 
-    const postProductt = async (product: any) => {
+  const postProductt = async (product: any) => {
         try {
           const response = await axios.post(
             "https://fakestoreapi.com/products",
@@ -166,8 +172,7 @@ export const ProductProvider : React.FC<{children:ReactNode}> =({
               },
             }
           );
-      
-          return response.status;
+          dispatch({ type: 'POST_PRODUCTS', payload: response.status });
         } catch (error) {
           throw new Error("Error in posting product");
         }
@@ -227,17 +232,18 @@ export const ProductProvider : React.FC<{children:ReactNode}> =({
             products: state.products,
             cart: state.cart,
             categories: state.categories,
+            status: state.status,
             updateCartQuantity,
             getProducts,
             getproduct,
             updateProduct,
             deleteProduct,
             getCategories,
-            getProductByCategory,postProductt,
-             
-                getCart,
-                addToCart,
-                removeFromCart,
+            getProductByCategory,
+            postProductt,
+            getCart,
+            addToCart,
+            removeFromCart,
           }}
         >
           {children}

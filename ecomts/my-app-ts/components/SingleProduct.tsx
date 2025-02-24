@@ -2,6 +2,8 @@ import React,{ useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useProductContext } from '../contexts/ProductContext';
 import {useNavigate} from 'react-router-dom'
+import { useQuery } from "@tanstack/react-query";
+
 type Product = {
 
   id: number;
@@ -12,42 +14,54 @@ type Product = {
   image: string;
  
 };
+
 function SingleProduct() {
+  
+  const fetchProduct = async (id:string) => {
+    try {
+      const response:any = await getproduct(id);
+      if(response){
+        return response;
+      }
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    }
+  };
+  const { getproduct } = useProductContext();
     const navigate = useNavigate();
     const { id } = useParams(); 
-    const { getproduct } = useProductContext();
-    const [product, setProduct] = useState<Product | null>(null);
 
-    useEffect(() => {
-        const fetchProduct = async () => {
-            try {
-                const response:any = await getproduct(id);
-                setProduct(response);
-            } catch (error) {
-                console.error("Error fetching product:", error);
-            }
-        };
+ 
+    const {data,isLoading,error} = useQuery<Product>({
+      queryKey:[id],
+      queryFn:()=>fetchProduct(id!),
+      retry:false,
+      refetchOnWindowFocus:false
+    })
 
-        if (id) fetchProduct();
-    }, [id]);
-
-    if (!product) return <p>Loading...</p>;
-
+    if (isLoading) {
+      return <h1>Loading ....</h1>;
+    }
+  
+    if (error) {
+      return <h1>{error.message}</h1>;
+    }
+  
     return (
         <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg overflow-hidden p-6 border border-gray-200">
           
           {/* Product Image */}
           <img 
-            src={product.image} 
-            alt={product.title} 
+            src={data?.image} 
+            alt={data?.title} 
             className="w-full h-64 object-contain p-4"
           />
       
           {/* Product Details */}
           <div className="text-center">
-            <h2 className="text-xl font-bold text-gray-800">{product.title}</h2>
-            <p className="text-gray-600 mt-2">{product.description}</p>
-            <p className="text-lg font-semibold text-blue-600 mt-4">Price: ${product.price}</p>
+            <h2 className="text-xl font-bold text-gray-800">{data?.title}</h2>
+            <p className="text-gray-600 mt-2">{data?.description}</p>
+            <p className="text-lg font-semibold text-blue-600 mt-4">Price: ${data?.price}</p>
       
             {/* Back Button */}
             <button 

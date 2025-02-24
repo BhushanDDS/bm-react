@@ -15,9 +15,7 @@ function Header() {
           <Link to="/dashboard" className="text-white text-lg font-medium hover:text-gray-200 transition-all">
             Admin Page
           </Link>
-          <Link to="/about" className="text-white text-lg font-medium hover:text-gray-200 transition-all">
-            About Us
-          </Link>
+          
           <Link to="/cart" className="text-white text-lg font-medium hover:text-gray-200 transition-all">
             Cart 
           </Link>

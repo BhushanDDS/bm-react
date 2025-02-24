@@ -2,7 +2,6 @@ import React from 'react'
 import {useProductContext} from '../contexts/ProductContext'
 import {useNavigate} from 'react-router-dom'
 type Product = {product:{
-
     id: number;
     title: string;
     price: number;

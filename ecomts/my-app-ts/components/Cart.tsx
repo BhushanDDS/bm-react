@@ -6,18 +6,12 @@ import Header from './Layouts/Header';
 function Cart() {
     const { cart, getCart, removeFromCart, updateCartQuantity } = useProductContext();
 
-    return (
+ return (
 
 <>
-
-
 <Header/>
-
-
-        <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200 mt-6 bg-gray-900">
-          
-          <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">Shopping Cart</h2>
-      
+  <div className="max-w-lg mx-auto bg-white shadow-lg rounded-lg p-6 border border-gray-200 mt-6 bg-gray-900">
+     <h2 className="text-2xl font-bold text-gray-800 text-center mb-4">Shopping Cart</h2>
           {cart.length === 0 ? (
             <p className="text-gray-500 text-center">Your cart is empty.</p>
           ) : (
@@ -32,7 +26,6 @@ function Cart() {
                     alt={item.title} 
                     className="w-16 h-16 object-contain rounded-lg"
                   />
-
                   <div className="flex-1">
                     {item.title}
                     <p className="text-lg font-medium text-gray-700">{item.title}</p>
@@ -65,7 +58,7 @@ function Cart() {
           )}
         </div>
 </>
-      );
+);
 }
 
 export default Cart;

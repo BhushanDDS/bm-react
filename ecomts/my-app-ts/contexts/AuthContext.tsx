@@ -10,7 +10,6 @@ const initialState: AuthState = {
   isAuthenticated: false,
 };
 
-// Reducer function to handle login/logout
 const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   switch (action.type) {
     case "LOGIN":
@@ -22,12 +21,11 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
   }
 };
 
-// Context definition
 const AuthContext = createContext<
   { state: AuthState; dispatch: React.Dispatch<AuthAction> } | undefined
 >(undefined);
 
-// AuthProvider component
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
@@ -38,11 +36,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-// Custom hook to use authentication context
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+    throw new Error("useAuth");
   }
   return context;
 };

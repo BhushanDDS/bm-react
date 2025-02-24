@@ -1,118 +1,121 @@
-import React, { useState } from 'react'
-import {useProductContext} from '../../contexts/ProductContext'
+import React, { useState } from "react";
+import { useProductContext } from "../../contexts/ProductContext";
+import { useMutation } from "@tanstack/react-query";
 
-type ratings={
-    rating:number;
-}
-type Product={
-    title:string ;
-    price :number;
-    description:string;
-    image :string;
-    category :string;
-    ratings?:ratings
+type Ratings = {
+  rate:number ;
+  count: number;
+};
 
-}
-function PostForm() {
+type Product = {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  image: string;
+  category: string;
+  ratings?: Ratings;
+};
 
-    const {postProductt}=useProductContext()
-    const [data, setdata] = useState<Product>({
-        title: "",
-        price: 0,
-        description: "",
-        image: "",
-        category: "",
-      });
-      const subitHandler = async (e: React.FormEvent) => {
-        e.preventDefault(); 
-      
-        try {
-          const response: any = await postProductt(data);
-          if (response === 201 || response === 200) {
-            alert(`Product Posted Successfully! Status code: ${response}`);
-            setdata({ title: "", price: 0, description: "", image: "", category: "" });
-          }
-        } catch (error) {
-          console.error("Error submitting product:", error);
-        }
-      };
-      
-      return (
-        <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6 border border-gray-200">
-          
-          <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">
-            Add Product
-          </h2>
-      
-          <form className="space-y-4" onSubmit={subitHandler}>
-            
-            
-            <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-                Enter Title
-              </label>
-              <input 
-                type="text" id="title" value={data?.title} 
-                onChange={(e) => setdata({ ...data, title: e.target.value })}
-                className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-      
-            <div>
-              <label htmlFor="price" className="block text-sm font-medium text-gray-700">
-                Enter Price
-              </label>
-              <input 
-                type="number" id="price" value={data?.price} 
-                onChange={(e) => setdata({ ...data, price: Number(e.target.value) })}
-                className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-      
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-                Enter Description
-              </label>
-              <textarea 
-                id="description" value={data?.description} 
-                onChange={(e) => setdata({ ...data, description: e.target.value })}
-                className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-      
-            <div>
-              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
-                Enter Image URL
-              </label>
-              <input 
-                type="text" id="image" value={data?.image} 
-                onChange={(e) => setdata({ ...data, image: e.target.value })}
-                className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-      
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-                Enter Category
-              </label>
-              <input 
-                type="text" id="category" value={data?.category} 
-                onChange={(e) => setdata({ ...data, category: e.target.value })}
-                className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-      
-            <button 
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-all"
-            >
-              Submit
-            </button>
-      
-          </form>
+const PostForm = () => {
+  const { status, postProductt } = useProductContext();
+
+  const postProduct = async (product: Product) => {
+    const response:any = await postProductt(product);
+    return status;
+  };
+
+  const [data, setData] = useState<Product>({
+    id: 1,
+    title: "",
+    price: 0,
+    description: "",
+    image: "",
+    category: "",
+  });
+
+  const { mutate, isPending, error } = useMutation({
+    mutationKey: ["postProduct"],
+    mutationFn: postProduct, 
+    onSuccess: () => {
+      alert(`Product Posted Successfully!`);
+      setData({ id: 1, title: "", price: 0, description: "", image: "", category: "" });
+    },
+  });
+
+  const submitHandler = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutate(data); 
+  };
+
+  return (
+    <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 border border-gray-200 mt-10">
+      <h2 className="text-2xl font-semibold text-center text-gray-800 mb-4">Add Product</h2>
+
+      {error && <p className="text-red-500 text-center">{(error as Error).message}</p>}
+
+      <form className="space-y-4" onSubmit={submitHandler}>
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Title</label>
+          <input
+            type="text"
+            value={data.title}
+            onChange={(e) => setData({ ...data, title: e.target.value })}
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
         </div>
-      );
-      
-}
 
-export default PostForm
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Price</label>
+          <input
+            type="number"
+            value={data.price}
+            onChange={(e) => setData({ ...data, price: Number(e.target.value) })}
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Description</label>
+          <textarea
+            value={data.description}
+            onChange={(e) => setData({ ...data, description: e.target.value })}
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Image URL</label>
+          <input
+            type="text"
+            value={data.image}
+            onChange={(e) => setData({ ...data, image: e.target.value })}
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Category</label>
+          <input
+            type="text"
+            value={data.category}
+            onChange={(e) => setData({ ...data, category: e.target.value })}
+            className="w-full p-2 mt-1 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <button
+          type="submit"
+          disabled={isPending}
+          className={`w-full py-2 text-white rounded-md transition-all ${
+            isPending ? "bg-gray-400 cursor-not-allowed" : "bg-blue-500 hover:bg-blue-600"
+          }`}
+        >
+          {isPending ? "Submitting..." : "Submit"}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default PostForm;

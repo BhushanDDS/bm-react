@@ -20,7 +20,6 @@ const AdminLogin = () => {
           user.email === email && user.password === password 
       );
       
-
       if (!adminUser) {
           alert("Invalid Credentials. Try again!");
     } else {
