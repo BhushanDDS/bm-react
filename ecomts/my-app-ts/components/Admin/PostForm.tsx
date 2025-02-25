@@ -21,7 +21,7 @@ const PostForm = () => {
   const { status, postProductt } = useProductContext();
 
   const postProduct = async (product: Product) => {
-    const response:any = await postProductt(product);
+    await postProductt(product);
     return status;
   };
 

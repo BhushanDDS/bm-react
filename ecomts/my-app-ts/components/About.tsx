@@ -7,7 +7,7 @@ function About() {
     const [data, setdata] = useState<any>()
 useEffect(()=>{
 
-  const getLink= async ()=>{
+const getLink= async ()=>{
 
         const res= await axios.get(`https://api.github.com/users/BhushanDDS`)
         setdata(res.data)

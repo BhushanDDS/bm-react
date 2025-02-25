@@ -18,7 +18,7 @@ function Admin_Product({ product }: AdminProductProps) {
 
   const {deleteProduct,updateProduct}=useProductContext();
 
-  const handledelete=async (id:number|any)=>{
+  const handledelete=async (id:number|undefined)=>{
     
     const resposne:number|any = await deleteProduct(id);
     if(resposne==200){
@@ -27,7 +27,7 @@ function Admin_Product({ product }: AdminProductProps) {
 
   }
 
-  const handleupdate=async(id:any)=>{
+  const handleupdate=async(id:number|undefined)=>{
     const response :number |any=await updateProduct(id);
      if(response==200){
       alert(`Product updated succesfully ... \n status code : ${response}`);
