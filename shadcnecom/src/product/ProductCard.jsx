@@ -20,7 +20,7 @@ function ProductCard({ product }) {
         <p className="text-gray-600 mt-1">${product.price}</p>
       </CardContent>
       <CardFooter>
-        <Button className="w-full mt-2" onClick={handleSingleProduct}>View Details</Button>
+        <Button className="mr-2 w-full mt-2" onClick={handleSingleProduct}>View Details</Button>
       </CardFooter>
     </Card>
   );

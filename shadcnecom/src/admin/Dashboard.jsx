@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 
 function Dashboard() {
-    const navigate= useNavigate()
+
+  const navigate= useNavigate()
   const { getAllProducts, products } = useProductContext();
   const [limit, setLimit] = useState(""); 
 
@@ -26,12 +27,9 @@ function Dashboard() {
 
   const handleUpdate = (product) => {
     navigate(`/update-product/${product.id}`)
-    
   };
 
-
-
-  return (
+return (
 
     <div className="p-6">
       <h1 className="text-2xl font-semibold text-center mb-6">Admin Dashboard</h1>

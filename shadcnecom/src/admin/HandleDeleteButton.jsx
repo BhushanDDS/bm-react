@@ -9,14 +9,14 @@ import { useProductContext } from "@/contexts/ProductContext";
 
 const HandleDeleteButton = ({ productId }) => {
   const { deleteProduct } = useProductContext();
-  const [open, setOpen] = useState(false); // State to control dialog visibility
+  const [open, setOpen] = useState(false); 
 
   const handleDelete = async () => {
     try {
       const res = await deleteProduct(productId);
       if (res === 200) {
         alert("Product deleted successfully!");
-        setOpen(false); // Close the dialog after successful deletion
+        setOpen(false);
       }
     } catch (error) {
       console.error("Error deleting product:", error);

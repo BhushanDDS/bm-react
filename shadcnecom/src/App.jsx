@@ -10,7 +10,7 @@ import {
   SelectContent, 
   SelectItem 
 } from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton"; // For loading state
+import { Skeleton } from "@/components/ui/skeleton"; 
 
 function App() {
   const {
@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   const categoryHandler = (selectedCategory) => {
-    setSelectedCategory(selectedCategory); // Update the selected category
+    setSelectedCategory(selectedCategory); 
 
     if (selectedCategory === "All Products") {
       getAllProducts();
@@ -52,7 +52,7 @@ function App() {
   return (
     <>
       <Header />
-
+      
       <div className="flex flex-wrap justify-center gap-4 p-6">
         <Select onValueChange={categoryHandler} value={selectedCategory}>
           <SelectTrigger className="w-60">

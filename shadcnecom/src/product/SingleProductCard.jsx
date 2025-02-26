@@ -22,7 +22,7 @@ function SingleProductCard({ product }) {
       </CardContent>
       <CardFooter>
         <Button className="w-full mt-2">Buy Now</Button>
-        <Button className="w-full mt-2" onClick={()=>{
+        <Button className="w-full mr-2 mt-2" onClick={()=>{
             navigate('/')
         }}>GO Back</Button>
       </CardFooter>
