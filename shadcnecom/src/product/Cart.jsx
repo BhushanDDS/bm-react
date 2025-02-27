@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 function Cart() {
   const { cart, removeFromCart } = useProductContext();
 
-  // Calculate total cart value
   const totalPrice = cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
 
   return (
@@ -37,8 +36,8 @@ function Cart() {
             </Card>
           ))}
           
-          {/* Total Price Section */}
-          <Separator className="my-4" />
+          
+                    <Separator className="my-4" />
           <div className="flex justify-between items-center p-4 text-lg font-semibold">
             <span>Total:</span>
             <span className="text-green-600">${totalPrice}</span>
