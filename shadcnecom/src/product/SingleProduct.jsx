@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Outlet } from "react-router-dom";
-import { useProductContext } from "@/contexts/ProductContext";
+import { useProductContext } from "../contexts/ProductContext";
 import SingleProductCard from "./SingleProductCard";
 
 function SingleProduct() {

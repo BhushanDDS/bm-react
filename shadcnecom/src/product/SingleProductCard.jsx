@@ -1,12 +1,19 @@
 import React, { use } from "react";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter } from "../components/ui/card";
+import { Button } from "../components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useProductContext } from "@/contexts/ProductContext";
 
 function SingleProductCard({ product }) {
+const {addToCart}=useProductContext();
 
     const navigate=useNavigate()
   if (!product) return <p>Loading...</p>;
+
+  const handleAddToCart=()=>{
+    addToCart(product.id,1);
+    alert(`${product.title} added to card succesfully `)
+  }
 
   return (
     <Card className="w-96 p-4 shadow-lg rounded-xl border text-center">
@@ -21,7 +28,7 @@ function SingleProductCard({ product }) {
         <p className="text-sm text-gray-500 mt-2">{product.description}</p>
       </CardContent>
       <CardFooter>
-        <Button className="w-full mt-2">Buy Now</Button>
+        <Button className="w-full mt-2" onClick={handleAddToCart}>Buy Now</Button>
         <Button className="w-full mr-2 mt-2" onClick={()=>{
             navigate('/')
         }}>GO Back</Button>

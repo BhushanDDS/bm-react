@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 
 function Header() {
   return (
@@ -15,6 +15,9 @@ function Header() {
         </Button>
         <Button variant="ghost" asChild>
           <Link to="/dashboard">Admin Page</Link>
+        </Button>
+        <Button variant="ghost" asChild>
+          <Link to="/cart">Cart</Link>
         </Button>
       </div>
     </nav>

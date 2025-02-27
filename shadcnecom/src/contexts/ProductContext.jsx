@@ -7,6 +7,7 @@ const ProductContext= createContext()
 export const UserContextProvider = ({children}) => {
     const [products, setProducts] =useState([])
     const [categories, setcategories] = useState(["hi","hello"])
+    const [cart, setCart] = useState([])
 
     const getAllProducts =async(limit=20)=>{
         try {
@@ -100,10 +101,56 @@ export const UserContextProvider = ({children}) => {
         return response.status
     }
 
+
+    const addToCart = async (productId, quantity) => {
+        try {
+          const productResponse = await axios.get(`https://fakestoreapi.com/products/${productId}`);
+          const product = productResponse.data;
+      
+          const existingItem = cart.find(item => item.productId === productId);
+          let updatedCart;
+      
+          if (existingItem) {
+            updatedCart = cart.map(item =>
+              item.productId === productId ? { ...item, quantity: item.quantity + quantity } : item
+            );
+          } else {
+            updatedCart = [...cart, { productId, quantity, title: product.title, price: product.price, image: product.image }];
+          }
+      
+          await axios.post(`https://fakestoreapi.com/carts`, {
+            userId: 1,
+            date: new Date().toISOString(),
+            products: updatedCart.map(item => ({ productId: item.productId, quantity: item.quantity })),
+          });
+      
+          setCart(updatedCart);
+        } catch (error) {
+          console.error('Error adding to cart:', error);
+        }
+      };
+      
+
+      const removeFromCart = async (productId) => {
+        try {
+          const response = await axios.delete(`https://fakestoreapi.com/carts/${productId}`); 
+          if (response.status === 200) {
+            const updatedCart = cart.filter(item => item.productId !== productId);
+            setCart(updatedCart);
+          }
+        } catch (error) {
+          console.error('Error removing from cart:', error);
+        }
+      };
+      
+
     return(
         <ProductContext.Provider value={{
             products,
             categories,
+            cart,
+            addToCart,
+            removeFromCart,
             addProductt,
             updateProduct,
             deleteProduct,
