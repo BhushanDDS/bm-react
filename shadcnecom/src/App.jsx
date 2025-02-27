@@ -9,7 +9,7 @@ import {
   SelectValue, 
   SelectContent, 
   SelectItem 
-} from "@/components/ui/select";
+} from "./components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton"; 
 
 function App() {

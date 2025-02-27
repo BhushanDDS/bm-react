@@ -9,6 +9,7 @@ import ProtectedRoute from './admin/ProtectedRoute'
 import Dashboard from './admin/Dashboard'
 import UpdateeProduct from './admin/UpdateeProduct'
 import PostForm from './admin/PostForm'
+import Cart from './product/Cart'
 createRoot(document.getElementById('root')).render(
 
 
@@ -19,11 +20,11 @@ createRoot(document.getElementById('root')).render(
     <Routes>
     <Route path='/' element={<App/>} />
     <Route path='/get-single-product/:id' element={<SingleProduct/>}/>
+    <Route path='/cart' element={<Cart/>}/>
     <Route element={<ProtectedRoute isAuthenticated={true}/>}>
           <Route path='/dashboard' element={<Dashboard/>}/>
           <Route path='/update-product/:id' element={<UpdateeProduct/>} />
           <Route path='/post-product' element={<PostForm/>} />
-          
           </Route>
     </Routes>
 

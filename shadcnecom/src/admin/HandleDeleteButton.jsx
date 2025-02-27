@@ -3,9 +3,9 @@ import {
   AlertDialog, AlertDialogTrigger, AlertDialogContent, 
   AlertDialogHeader, AlertDialogFooter, AlertDialogTitle, 
   AlertDialogDescription 
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { useProductContext } from "@/contexts/ProductContext";
+} from "../components/ui/alert-dialog";
+import { Button } from "../components/ui/button";
+import { useProductContext } from "../contexts/ProductContext";
 
 const HandleDeleteButton = ({ productId }) => {
   const { deleteProduct } = useProductContext();

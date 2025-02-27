@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useProductContext } from "../contexts/ProductContext";
 import AdminProductCard from "./AdminProductCard";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 
 function Dashboard() {
