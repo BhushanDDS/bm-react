@@ -60,10 +60,10 @@ function Login() {
         <Heading size="lg" mb={6} textAlign="center">Login</Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl isInvalid={errors.username} mb={4}>
-            <FormLabel>Email:</FormLabel>
+            <FormLabel>Username:</FormLabel>
             <Input 
               type="text" 
-              {...register("username", { required: "Email is required" })} 
+              {...register("username", { required: "username is required" })} 
             />
             <FormErrorMessage>{errors.username?.message}</FormErrorMessage>
           </FormControl>

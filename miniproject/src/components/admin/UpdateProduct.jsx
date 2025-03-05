@@ -1,5 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import { useProductStore } from "../../contexts/ProductContext";
 import {
   Box,
@@ -9,6 +10,7 @@ import {
   FormLabel,
   Textarea,
   useToast,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import Head from "./Header/Head";
 
@@ -18,76 +20,97 @@ const UpdateProduct = () => {
   const toast = useToast();
   const { updateProduct } = useProductStore();
   const location = useLocation();
-
   const existingProduct = location.state || {};
-  
-  const [formData, setFormData] = useState({
-    title: existingProduct.title || "",
-    price: existingProduct.price || "",
-    description: existingProduct.description || "",
-    category: existingProduct.category || "",
-    image: existingProduct.image || "",
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    defaultValues: {
+      title: existingProduct.title || "",
+      price: existingProduct.price || "",
+      description: existingProduct.description || "",
+      category: existingProduct.category || "",
+      image: existingProduct.image || "",
+    },
   });
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const mutation = useMutation({
+    mutationFn: async (updatedData) => {
+      await updateProduct(id, updatedData);
+    },
+    onSuccess: () => {
+      toast({
+        title: "Product Updated",
+        description: "The product has been updated successfully.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate(`/product/${id}`);
+    },
+    onError: () => {
+      toast({
+        title: "Update Failed",
+        description: "Something went wrong. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    },
+  });
 
-  const handleUpdate = async () => {
-    await updateProduct(id, formData);
-
-    toast({
-      title: "Product Updated",
-      description: "The product has been updated successfully.",
-      status: "success",
-      duration: 3000,
-      isClosable: true,
-    });
-
-    navigate(`/product/${id}`);
+  const onSubmit = (data) => {
+    mutation.mutate(data);
   };
 
   return (
     <Box maxW="500px" mx="auto" mt={8} p={6} boxShadow="md">
-        <Head/>
-      <FormControl mb={4}>
-        <FormLabel>Title</FormLabel>
-        <Input name="title" value={formData.title} onChange={handleChange} />
-      </FormControl>
+      <Head />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <FormControl mb={4} isInvalid={errors.title}>
+          <FormLabel>Title</FormLabel>
+          <Input {...register("title", { required: "Title is required" })} />
+          <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel>Price</FormLabel>
-        <Input
-          name="price"
-          type="number"
-          value={formData.price}
-          onChange={handleChange}
-        />
-      </FormControl>
+        <FormControl mb={4} isInvalid={errors.price}>
+          <FormLabel>Price</FormLabel>
+          <Input
+            type="number"
+            {...register("price", {
+              required: "Price is required",
+              valueAsNumber: true,
+              min: { value: 1, message: "Price must be at least 1" },
+            })}
+          />
+          <FormErrorMessage>{errors.price?.message}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel>Description</FormLabel>
-        <Textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-        />
-      </FormControl>
+        <FormControl mb={4} isInvalid={errors.description}>
+          <FormLabel>Description</FormLabel>
+          <Textarea {...register("description", { required: "Description is required" })} />
+          <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel>Category</FormLabel>
-        <Input name="category" value={formData.category} onChange={handleChange} />
-      </FormControl>
+        <FormControl mb={4} isInvalid={errors.category}>
+          <FormLabel>Category</FormLabel>
+          <Input {...register("category", { required: "Category is required" })} />
+          <FormErrorMessage>{errors.category?.message}</FormErrorMessage>
+        </FormControl>
 
-      <FormControl mb={4}>
-        <FormLabel>Image URL</FormLabel>
-        <Input name="image" value={formData.image} onChange={handleChange} />
-      </FormControl>
+        <FormControl mb={4} isInvalid={errors.image}>
+          <FormLabel>Image URL</FormLabel>
+          <Input {...register("image", { required: "Image URL is required" })} />
+          <FormErrorMessage>{errors.image?.message}</FormErrorMessage>
+        </FormControl>
 
-      <Button colorScheme="blue" mr={3} onClick={handleUpdate}>
-        Update Product
-      </Button>
-      <Button onClick={() => navigate(-1)}>Cancel</Button>
+        <Button colorScheme="blue" mr={3} type="submit" isLoading={isSubmitting || mutation.isLoading}>
+          Update Product
+        </Button>
+        <Button onClick={() => navigate(-1)}>Cancel</Button>
+      </form>
     </Box>
   );
 };

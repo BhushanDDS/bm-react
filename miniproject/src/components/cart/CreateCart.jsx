@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../../contexts/CartContext";
 import { useForm, useFieldArray } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 import {
   Box,
   Button,
@@ -19,7 +20,6 @@ const CreateCart = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  // Initialize react-hook-form
   const {
     register,
     handleSubmit,
@@ -37,12 +37,12 @@ const CreateCart = () => {
     name: "products",
   });
 
-  // Form submit handler
-  const onSubmit = async (data) => {
-    const newCart = { userId: data.userId, date: new Date().toISOString(), products: data.products };
-    const createdCart = await createCart(newCart);
-
-    if (createdCart) {
+  const mutation = useMutation({
+    mutationFn: async (data) => {
+      const newCart = { userId: data.userId, date: new Date().toISOString(), products: data.products };
+      return await createCart(newCart);
+    },
+    onSuccess: () => {
       toast({
         title: "Cart Created",
         description: "The cart has been successfully created!",
@@ -51,7 +51,8 @@ const CreateCart = () => {
         isClosable: true,
       });
       navigate("/manage-orders");
-    } else {
+    },
+    onError: () => {
       toast({
         title: "Error",
         description: "Failed to create cart.",
@@ -59,49 +60,39 @@ const CreateCart = () => {
         duration: 3000,
         isClosable: true,
       });
-    }
-  };
+    },
+  });
 
   return (
     <Box maxW="400px" mx="auto" mt={6} p={4} boxShadow="md">
       <Heading size="md" textAlign="center">Create New Cart</Heading>
-      <VStack as="form" onSubmit={handleSubmit(onSubmit)} spacing={4} mt={4}>
-        {/* User ID Input */}
+      <VStack as="form" onSubmit={handleSubmit(mutation.mutate)} spacing={4} mt={4}>
         <FormControl isInvalid={errors.userId}>
           <FormLabel>User ID</FormLabel>
           <Input
             {...register("userId", {
               required: "User ID is required",
-              pattern: {
-                value: /^[0-9]+$/,
-                message: "User ID must be a number",
-              },
+              pattern: { value: /^[0-9]+$/, message: "User ID must be a number" },
             })}
             placeholder="Enter User ID"
           />
           <FormErrorMessage>{errors.userId?.message}</FormErrorMessage>
         </FormControl>
 
-        {/* Product Fields */}
         {fields.map((field, index) => (
           <Box key={field.id} w="full">
-            {/* Product ID */}
             <FormControl isInvalid={errors.products?.[index]?.productId}>
               <FormLabel>Product ID</FormLabel>
               <Input
                 {...register(`products.${index}.productId`, {
                   required: "Product ID is required",
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "Product ID must be a number",
-                  },
+                  pattern: { value: /^[0-9]+$/, message: "Product ID must be a number" },
                 })}
                 placeholder="Enter Product ID"
               />
               <FormErrorMessage>{errors.products?.[index]?.productId?.message}</FormErrorMessage>
             </FormControl>
 
-            {/* Quantity */}
             <FormControl isInvalid={errors.products?.[index]?.quantity}>
               <FormLabel>Quantity</FormLabel>
               <Input
@@ -115,26 +106,21 @@ const CreateCart = () => {
               <FormErrorMessage>{errors.products?.[index]?.quantity?.message}</FormErrorMessage>
             </FormControl>
 
-            {/* Remove Product Button */}
             {fields.length > 1 && (
-              <Button
-                mt={2}
-                colorScheme="red"
-                onClick={() => remove(index)}
-              >
+              <Button mt={2} colorScheme="red" onClick={() => remove(index)}>
                 Remove Product
               </Button>
             )}
           </Box>
         ))}
 
-        {/* Add Product Button */}
         <Button onClick={() => append({ productId: "", quantity: 1 })} colorScheme="blue" variant="outline">
           Add Product
         </Button>
 
-        {/* Submit Button */}
-        <Button type="submit" colorScheme="green">Create Order</Button>
+        <Button type="submit" colorScheme="green" isLoading={mutation.isLoading}>
+          Create Order
+        </Button>
       </VStack>
     </Box>
   );
