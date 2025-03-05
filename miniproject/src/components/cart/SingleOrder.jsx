@@ -65,6 +65,10 @@ const SingleOrder = () => {
         <Text fontSize="lg" mt={2}>
           <strong>Customer ID:</strong> {cart?.userId || "Unknown"}
         </Text>
+        <Text fontSize="lg" mt={2}>
+  <strong>Customer:</strong> {cart?.username || "Unknown"}
+</Text>
+
         <Text fontSize="xl" fontWeight="bold" color="green.500" mt={2}>
           Total: $
           {cart?.products ? calculateTotal(cart).toFixed(2) : "0.00"}
@@ -74,14 +78,15 @@ const SingleOrder = () => {
           Products
         </Heading>
         <List spacing={2} textAlign="left" mt={2}>
-          {cart?.products?.map((product) => (
-            <ListItem key={product.productId}>
-              <Text>
-                {product.quantity}x Product #{product.productId}
-              </Text>
-            </ListItem>
-          )) || <Text>No products found</Text>}
-        </List>
+  {cart?.products?.map((product) => (
+    <ListItem key={product.productId}>
+      <Text>
+        {product.quantity}x <strong>{product.name}</strong> (ID: {product.productId})
+      </Text>
+    </ListItem>
+  )) || <Text>No products found</Text>}
+</List>
+
 
         <Box mt={4}>
           <Button

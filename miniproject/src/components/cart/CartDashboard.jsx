@@ -47,9 +47,7 @@ const CartDashboard = () => {
                   <Text mt={2}>
                     <strong>Customer ID:</strong> {cart.userId}
                   </Text>
-                  <Text>
-                    <strong>Total:</strong> ${calculateTotal(cart).toFixed(2)}
-                  </Text>
+                 
                   <Button
                     colorScheme="blue"
                     mt={3}
