@@ -6,29 +6,44 @@ import {
     getAllProductsApi 
 } from '../../api/AdminApi';
 import { 
-    Box, Button, Spinner, Grid, Card, CardBody, Image, Text, Heading 
+    Box, Button, Spinner, Grid, Card, CardBody, Image, Text, Heading, Input 
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
 const ProductList = () => {
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [searchTerm, setSearchTerm] = useState("");
     const navigate = useNavigate();
 
-    const { data: categories, isLoading: categoriesLoading, error: categoriesError } = useQuery({
+    const { data: categories, isLoading: categoriesLoading } = useQuery({
         queryKey: ['categories'],
         queryFn: getAllCategories
     });
 
-    const { data: products, isLoading: productsLoading, error: productsError } = useQuery({
+    const { data: products, isLoading: productsLoading } = useQuery({
         queryKey: ['products', selectedCategory],
         queryFn: () => selectedCategory ? getProductByCategories(selectedCategory) : getAllProductsApi(),
         enabled: !!selectedCategory || selectedCategory === null
     });
 
+    // Filter products based on search input
+    const filteredProducts = products?.filter((product) =>
+        product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
     return (
         <Box>
             <Heading size="lg" mb={4}>Product Categories</Heading>
-            
+
+            {/* Search Input */}
+            <Input 
+                placeholder="Search products..." 
+                value={searchTerm} 
+                onChange={(e) => setSearchTerm(e.target.value)} 
+                mb={4}
+            />
+
+            {/* Category Selection */}
             <Box mb={4}>
                 <Button 
                     colorScheme={selectedCategory === null ? "blue" : "gray"} 
@@ -55,7 +70,7 @@ const ProductList = () => {
 
             {productsLoading ? <Spinner /> : (
                 <Grid templateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={4}>
-                    {products?.map((product) => (
+                    {filteredProducts?.map((product) => (
                         <Card key={product.id} boxShadow="md" p={4} borderRadius="md">
                             <Image src={product.image} alt={product.title} boxSize="150px" objectFit="contain" mx="auto" />
                             <CardBody textAlign="center">
@@ -74,7 +89,11 @@ const ProductList = () => {
                 </Grid>
             )}
 
-            {productsError && <Text color="red.500">Error loading products: {productsError.message}</Text>}
+            {!filteredProducts?.length && !productsLoading && (
+                <Text color="gray.500" textAlign="center" mt={4}>
+                    No products found.
+                </Text>
+            )}
         </Box>
     );
 };
