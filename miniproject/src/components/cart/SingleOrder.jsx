@@ -1,4 +1,5 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate ,Link} from "react-router-dom";
+
 import { useQuery } from "@tanstack/react-query";
 import {
   Box,
@@ -66,8 +67,9 @@ const SingleOrder = () => {
           <strong>Customer ID:</strong> {cart?.userId || "Unknown"}
         </Text>
         <Text fontSize="lg" mt={2}>
-  <strong>Customer:</strong> {cart?.username || "Unknown"}
+  <strong>Customer:</strong> 
 </Text>
+<Button><Link to={`/user/${cart?.userId}`}>{cart?.username}</Link></Button>
 
         <Text fontSize="xl" fontWeight="bold" color="green.500" mt={2}>
           Total: $
